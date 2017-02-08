@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_checkout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="edu.coe.djshadle.snackcheckout.Checkout"
+    tools:showIn="@layout/activity_checkout">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="176dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtItem1" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtItem2" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtItem3" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="177dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtPrice1"
+                android:textAlignment="viewEnd" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtPrice2"
+                android:textAlignment="viewEnd" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtPrice3"
+                android:textAlignment="viewEnd" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:text="Total:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="81dp"
+        android:layout_marginBottom="106dp"
+        android:id="@+id/txtConstantTotal" />
+
+    <TextView
+        android:text="Paid:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtConstantTotal"
+        android:layout_alignStart="@+id/txtConstantTotal"
+        android:layout_marginTop="28dp"
+        android:id="@+id/txtConstantPaid" />
+
+    <TextView
+        android:text="Change:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtConstantPaid"
+        android:layout_alignStart="@+id/txtConstantPaid"
+        android:layout_marginTop="21dp"
+        android:id="@+id/txtConstantChange" />
+
+    <TextView
+        android:text="Total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtConstantTotal"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="67dp"
+        android:id="@+id/txtTotal" />
+
+    <EditText
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/edtChange"
+        android:layout_alignBaseline="@+id/txtConstantPaid"
+        android:layout_alignBottom="@+id/txtConstantPaid"
+        android:layout_alignEnd="@+id/txtTotal" />
+
+    <TextView
+        android:text="Change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtConstantChange"
+        android:layout_alignEnd="@+id/edtChange"
+        android:id="@+id/txtChange" />
+</RelativeLayout>
