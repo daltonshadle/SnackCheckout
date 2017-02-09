@@ -1,6 +1,7 @@
 package edu.coe.djshadle.snackcheckout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.support.annotation.StringDef;
@@ -81,7 +82,8 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sales) {
-
+            Intent i = new Intent("edu.coe.djshadle.SnackCheckout.TotalSales");
+            startActivity(i);
             return true;
         }
 
@@ -137,6 +139,10 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
             //checkout
             if(!paid.getText().toString().isEmpty()) {
                 if(Integer.parseInt(paid.getText().toString()) >= totalPrice) {
+                    SharedPreferences s;
+                    //SharedPreferences.Editor e = s.edit();
+
+
 
                 } else {
                     Toast.makeText(this, "Please enter greater amount paid", Toast.LENGTH_SHORT).show();

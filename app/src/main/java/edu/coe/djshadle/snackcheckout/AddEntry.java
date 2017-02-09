@@ -70,7 +70,8 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sales) {
-
+            Intent i = new Intent("edu.coe.djshadle.SnackCheckout.TotalSales");
+            startActivity(i);
             return true;
         }
 

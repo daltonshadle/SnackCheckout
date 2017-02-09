@@ -23,8 +23,19 @@
             android:label="@string/title_activity_checkout"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="edu.coe.djshadle.SnackCheckout.Checkout"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="edu.coe.djshadle.SnackCheckout.Checkout" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TotalSales"
+            android:label="@string/title_activity_total_sales"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="edu.coe.djshadle.SnackCheckout.TotalSales" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>
