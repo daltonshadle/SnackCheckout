@@ -23,15 +23,6 @@
         android:id="@+id/txtConstantPaid" />
 
     <TextView
-        android:text="Total"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtConstantTotal"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="67dp"
-        android:id="@+id/txtTotal" />
-
-    <TextView
         android:text="Change"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,7 +40,7 @@
         android:layout_alignBottom="@+id/txtConstantPaid"
         android:layout_alignEnd="@+id/txtTotal"
         android:hint="Enter Amount"
-        android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
+        android:textAppearance="@android:style/TextAppearance.Small"
         android:textAlignment="textEnd" />
 
     <TextView
@@ -59,16 +50,6 @@
         android:id="@+id/txtConstantChange"
         android:layout_below="@+id/edtChange"
         android:layout_alignStart="@+id/txtConstantPaid" />
-
-    <TextView
-        android:text="Total:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="164dp"
-        android:id="@+id/txtConstantTotal"
-        android:layout_marginEnd="70dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/edtChange" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -135,16 +116,36 @@
         </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        android:text="Total:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="127dp"
+        android:id="@+id/txtConstantTotal"
+        android:layout_above="@+id/btnCancelCheckout"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="60dp" />
+
+    <TextView
+        android:text="Total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="60dp"
+        android:id="@+id/txtTotal"
+        android:layout_alignBaseline="@+id/txtConstantTotal"
+        android:layout_alignBottom="@+id/txtConstantTotal"
+        android:layout_alignParentEnd="true" />
+
     <Button
         android:text="Cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="28dp"
+        android:layout_marginBottom="38dp"
         android:id="@+id/btnCancelCheckout"
+        android:backgroundTint="@color/minus"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/edtChange"
-        android:backgroundTint="@color/minus" />
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="30dp" />
 
     <Button
         android:text="Confirm"
@@ -155,5 +156,5 @@
         android:layout_alignBaseline="@+id/btnCancelCheckout"
         android:layout_alignBottom="@+id/btnCancelCheckout"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="39dp" />
+        android:layout_marginEnd="30dp" />
 </RelativeLayout>

@@ -69,7 +69,8 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sales) {
+
             return true;
         }
 
