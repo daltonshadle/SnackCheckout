@@ -44,7 +44,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <TextView
             android:text="TextView"
@@ -77,5 +77,19 @@
             android:id="@+id/txtPriceTotal"
             android:paddingBottom="20dp"
             android:textAlignment="textEnd" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:text="Reset Inventory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/btnResetInventory"
+                android:backgroundTint="@color/minus" />
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

@@ -13,10 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AddEntry extends AppCompatActivity implements View.OnClickListener {
 
-    private String TAG = "Dalton";
     TextView itemQ1, itemQ2, itemQ3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,15 +128,17 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
             q2 = Integer.parseInt(itemQ2.getText().toString());
             q3 = Integer.parseInt(itemQ3.getText().toString());
 
-            Intent i = new Intent("edu.coe.djshadle.SnackCheckout.Checkout");
+            if (q1>0 || q2>0 || q3>0) {
+                Intent i = new Intent("edu.coe.djshadle.SnackCheckout.Checkout");
 
-            i.putExtra("q1", q1);
-            i.putExtra("q2", q2);
-            i.putExtra("q3", q3);
+                i.putExtra("q1", q1);
+                i.putExtra("q2", q2);
+                i.putExtra("q3", q3);
 
-            Log.d(TAG, "Got to before starting activity");
-            startActivity(i);
-            Log.d(TAG, "Got to after starting activity");
+                startActivity(i);
+            } else {
+                Toast.makeText(this, "Please enter a quantity", Toast.LENGTH_SHORT).show();
+            }
         }
         if(v.getId() == R.id.btnCancel) {
             itemQ3.setText("0");

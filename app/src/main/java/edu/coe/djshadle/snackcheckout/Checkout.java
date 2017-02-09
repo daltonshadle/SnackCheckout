@@ -22,21 +22,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Checkout extends AppCompatActivity implements View.OnClickListener {
-    private String TAG = "Dalton";
     private TextView total, change, item1, item2, item3, price1, price2, price3;
     private EditText paid;
     private double q1, q2, q3, totalPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "Got to the other activity");
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Log.d(TAG, "Got to after activity creation");
 
         q1 = getIntent().getIntExtra("q1", 0);
         q2 = getIntent().getIntExtra("q2", 0);
@@ -49,12 +45,12 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
         paid.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                //not used
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                //not used
             }
 
             @Override
