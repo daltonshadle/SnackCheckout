@@ -13,6 +13,63 @@
     tools:context="edu.coe.djshadle.snackcheckout.Checkout"
     tools:showIn="@layout/activity_checkout">
 
+    <TextView
+        android:text="Paid:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtConstantTotal"
+        android:layout_alignStart="@+id/txtConstantTotal"
+        android:layout_marginTop="28dp"
+        android:id="@+id/txtConstantPaid" />
+
+    <TextView
+        android:text="Total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtConstantTotal"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="67dp"
+        android:id="@+id/txtTotal" />
+
+    <TextView
+        android:text="Change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtConstantChange"
+        android:layout_alignEnd="@+id/edtChange"
+        android:id="@+id/txtChange" />
+
+    <EditText
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/edtChange"
+        android:layout_alignBaseline="@+id/txtConstantPaid"
+        android:layout_alignBottom="@+id/txtConstantPaid"
+        android:layout_alignEnd="@+id/txtTotal"
+        android:hint="Enter Amount"
+        android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
+        android:textAlignment="textEnd" />
+
+    <TextView
+        android:text="Change:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtConstantChange"
+        android:layout_below="@+id/edtChange"
+        android:layout_alignStart="@+id/txtConstantPaid" />
+
+    <TextView
+        android:text="Total:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="164dp"
+        android:id="@+id/txtConstantTotal"
+        android:layout_marginEnd="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/edtChange" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -29,19 +86,22 @@
                 android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtItem1" />
+                android:id="@+id/txtItem1"
+                android:paddingBottom="10dp"/>
 
             <TextView
                 android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtItem2" />
+                android:id="@+id/txtItem2"
+                android:paddingBottom="10dp"/>
 
             <TextView
                 android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtItem3" />
+                android:id="@+id/txtItem3"
+                android:paddingBottom="10dp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -54,76 +114,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtPrice1"
-                android:textAlignment="viewEnd" />
+                android:textAlignment="viewEnd"
+                android:paddingBottom="10dp"/>
 
             <TextView
                 android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtPrice2"
-                android:textAlignment="viewEnd" />
+                android:textAlignment="viewEnd"
+                android:paddingBottom="10dp"/>
 
             <TextView
                 android:text="TextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/txtPrice3"
-                android:textAlignment="viewEnd" />
+                android:textAlignment="viewEnd"
+                android:paddingBottom="10dp"/>
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:text="Total:"
+    <Button
+        android:text="Cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="28dp"
+        android:id="@+id/btnCancelCheckout"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="81dp"
-        android:layout_marginBottom="106dp"
-        android:id="@+id/txtConstantTotal" />
+        android:layout_toStartOf="@+id/edtChange"
+        android:backgroundTint="@color/minus" />
 
-    <TextView
-        android:text="Paid:"
+    <Button
+        android:text="Confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtConstantTotal"
-        android:layout_alignStart="@+id/txtConstantTotal"
-        android:layout_marginTop="28dp"
-        android:id="@+id/txtConstantPaid" />
-
-    <TextView
-        android:text="Change:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtConstantPaid"
-        android:layout_alignStart="@+id/txtConstantPaid"
-        android:layout_marginTop="21dp"
-        android:id="@+id/txtConstantChange" />
-
-    <TextView
-        android:text="Total"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtConstantTotal"
+        android:id="@+id/btnConfirmCheckout"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_alignBaseline="@+id/btnCancelCheckout"
+        android:layout_alignBottom="@+id/btnCancelCheckout"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="67dp"
-        android:id="@+id/txtTotal" />
-
-    <EditText
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/edtChange"
-        android:layout_alignBaseline="@+id/txtConstantPaid"
-        android:layout_alignBottom="@+id/txtConstantPaid"
-        android:layout_alignEnd="@+id/txtTotal" />
-
-    <TextView
-        android:text="Change"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/txtConstantChange"
-        android:layout_alignEnd="@+id/edtChange"
-        android:id="@+id/txtChange" />
+        android:layout_marginEnd="39dp" />
 </RelativeLayout>

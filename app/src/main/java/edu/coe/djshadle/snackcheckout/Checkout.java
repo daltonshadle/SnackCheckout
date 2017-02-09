@@ -8,13 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class Checkout extends AppCompatActivity {
+public class Checkout extends AppCompatActivity implements View.OnClickListener {
     private String TAG = "Dalton";
     private TextView total, change, item1, item2, item3, price1, price2, price3;
     private EditText paid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "Got to the other activity");
@@ -29,6 +31,7 @@ public class Checkout extends AppCompatActivity {
         int q1 = getIntent().getIntExtra("q1", 0), q2 = getIntent().getIntExtra("q2", 0), q3 = getIntent().getIntExtra("q3", 0);
         setViews();
         setFields(q1,q2,q3);
+        setButtons();
     }
 
     private void setViews(){
@@ -53,5 +56,21 @@ public class Checkout extends AppCompatActivity {
         price3.setText("$" + String.valueOf(q3));
 
         total.setText("$" + String.valueOf(q1+q2*.75+q3*1.5));
+    }
+
+    private void setButtons(){
+        Button confirm = (Button) findViewById(R.id.btnConfirmCheckout);
+        Button cancel = (Button) findViewById(R.id.btnCancelCheckout);
+
+        confirm.setOnClickListener(this);
+        cancel.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnCancelCheckout:
+
+        }
     }
 }
