@@ -1,5 +1,6 @@
 package edu.coe.djshadle.snackcheckout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.DecimalFormat;
@@ -135,14 +136,33 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
             newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(newIntent);
         }
+
         if(v.getId() == R.id.btnConfirmCheckout) {
-            //checkout
+            //checkout: save all the items and then
             if(!paid.getText().toString().isEmpty()) {
                 if(Integer.parseInt(paid.getText().toString()) >= totalPrice) {
-                    SharedPreferences s;
-                    //SharedPreferences.Editor e = s.edit();
+                    float savedValue = 0;
+                    SharedPreferences s = getSharedPreferences("myFile", 0);
+                    SharedPreferences.Editor e = s.edit();
 
+                    savedValue = s.getFloat("quantityItem1", 0) + (float) q1;
+                    e.putFloat("quantityItem1", savedValue);
 
+                    savedValue = s.getFloat("quantityItem2", 0) + (float) q2;
+                    e.putFloat("quantityItem2", savedValue);
+
+                    savedValue = s.getFloat("quantityItem3", 0) + (float) q3;
+                    e.putFloat("quantityItem3", savedValue);
+
+                    savedValue = s.getFloat("totalRevenue", 0) + (float) totalPrice;
+                    e.putFloat("totalRevenue", savedValue);
+
+                    e.apply();
+
+                    Intent newIntent = new Intent(this,AddEntry.class);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(newIntent);
 
                 } else {
                     Toast.makeText(this, "Please enter greater amount paid", Toast.LENGTH_SHORT).show();
