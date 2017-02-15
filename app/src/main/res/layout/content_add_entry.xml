@@ -158,6 +158,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <edu.coe.djshadle.snackcheckout.upDownBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/udbTest"/>
+
+
         <Button
             android:text="Checkout"
             android:layout_width="match_parent"
