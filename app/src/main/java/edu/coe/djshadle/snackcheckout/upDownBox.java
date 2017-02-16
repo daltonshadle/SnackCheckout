@@ -19,16 +19,17 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
     private Button mUpButton, mDownButton;
     private TextView mValueText, mItemName;
     private int startVal;
-    //private String startItemName = "Item";
+    private String startItemName;
     //m is for member variables
 
     public upDownBox(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initializeViews(context);
 
+        startItemName = "Item";
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.upDownBox);
         startVal = ta.getInt(R.styleable.upDownBox_startValue, 0);
-        //startItemName = ta.getString(R.styleable.upDownBox_itemName);
+        startItemName = ta.getString(R.styleable.upDownBox_startItemName);
         ta.recycle();
     }
 
@@ -36,9 +37,10 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         super(context, attrs);
         initializeViews(context);
 
+        startItemName = "Item";
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.upDownBox);
         startVal = ta.getInt(R.styleable.upDownBox_startValue, 0);
-        //startItemName = ta.getString(R.styleable.upDownBox_itemName);
+        startItemName = ta.getString(R.styleable.upDownBox_startItemName);
         ta.recycle();
     }
 
@@ -64,7 +66,7 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         mUpButton.setOnClickListener(this);
         mDownButton.setOnClickListener(this);
         setValue(startVal);
-        //setItemName(startItemName);
+        setItemName(startItemName);
     }
 
     public int getValue(){
@@ -77,17 +79,17 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         }
     }
 
-    /*
+
     public String getItemName(){
         return mItemName.getText().toString();
     }
 
     public void setItemName(String s){
-        if(!s.isEmpty()){
+        if(s!=null && !s.isEmpty()){
            mItemName.setText(s);
         }
     }
-    */
+
 
     @Override
     public void onClick(View v) {
