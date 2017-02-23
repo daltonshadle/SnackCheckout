@@ -1,6 +1,7 @@
 package edu.coe.djshadle.snackcheckout;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,10 +13,17 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddEntry extends AppCompatActivity implements View.OnClickListener {
+
+    private int numItems;
+    private LinearLayout wholeLayout;
+    private upDownBox udbArray[];
+    private SharedPreferences s;
+    private SharedPreferences.Editor e;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,13 +31,30 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_add_entry);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        s = getSharedPreferences("myFile", 0);
+        e = s.edit();
+
+        //only temp
+        e.putInt("CInumItems", 0);
+        e.apply();
 
         setButtons();
         setContorls();
     }
 
     private void setContorls(){
+        numItems = s.getInt("CInumItems", 0);
+        udbArray = new upDownBox[8];
+        wholeLayout = (LinearLayout) findViewById(R.id.content_add_entry);
 
+        for(int i = 0; i < numItems; i++){
+            String name = s.getString("CIitemName" + String.valueOf(i), "") + " - $" + String.valueOf(s.getFloat("CIitemPrice" + String.valueOf(i), 0));
+            udbArray[i] = new upDownBox(this);
+            udbArray[i].setItemName(name);
+            udbArray[i].setPlusButtonColor(R.color.plus);
+            udbArray[i].setMinusButtonColor(R.color.minus);
+            wholeLayout.addView(udbArray[i]);
+        }
     }
 
     private void setButtons(){
@@ -96,4 +121,5 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
             //set all UDboxes to 0
         }
     }
+
 }

@@ -1,24 +1,32 @@
 package edu.coe.djshadle.snackcheckout;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class CustomizeItem extends AppCompatActivity implements View.OnClickListener {
+public class CustomizeItem extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     private static final int MAX_ITEMS = 8;
     private int numItems = 0;
@@ -40,10 +48,13 @@ public class CustomizeItem extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_customize_item);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         s = getSharedPreferences("myFile", 0);
         e = s.edit();
+        numItems = s.getInt("CInumItems", 0);
 
         setControls();
+        startList();
     }
 
     private void setControls(){
@@ -62,6 +73,7 @@ public class CustomizeItem extends AppCompatActivity implements View.OnClickList
 
         customUDBListAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, customUDBList);
         mItemList.setAdapter(customUDBListAdapter);
+        mItemList.setOnItemClickListener(this);
     }
 
     @Override
@@ -108,9 +120,6 @@ public class CustomizeItem extends AppCompatActivity implements View.OnClickList
                         customUDBListAdapter.notifyDataSetChanged();
 
                         numItems++;
-                        //maybe put these when they save the item list
-                        e.putString("itemName" + String.valueOf(numItems), itemName);
-                        e.putFloat("itemPrice" + String.valueOf(numItems), itemPrice);
                     } else {
                         Toast.makeText(this, "Enter item name and price", Toast.LENGTH_SHORT).show();
                     }
@@ -119,14 +128,155 @@ public class CustomizeItem extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.CIbtnReset:
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Are you sure you want to reset the list?").setTitle("Warning");
 
+                builder.setPositiveButton("Reset", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked reset button
+                        numItems = 0;
+                        customUDBList.clear();
+                        customUDBListAdapter.notifyDataSetChanged();
+                        ClearSharedPrefAllItems();
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked cancel button
+                    }
+                });
+                AlertDialog alert =builder.create();
+                alert.show();
                 break;
             case R.id.CIbtnSave:
+                //save all list items, prices, and numItems in shared preferences
+                Toast.makeText(this, "Items have been saved", Toast.LENGTH_SHORT).show();
+                SharedPrefAllItems();
 
+                break;
+            case R.id.CIListItems:
+                Collections.sort(customUDBList);
+                customUDBListAdapter.notifyDataSetChanged();
                 break;
             default:
                 break;
         }
-
     }
+
+    private void SharedPrefAllItems(){
+        e.putInt("CInumItems", numItems);
+        for(int i = 0; i < numItems; i++){
+            String itemCollection = customUDBList.get(i);
+            int dashIndex = itemCollection.indexOf("-"), dollarIndex = itemCollection.indexOf("$");
+            String itemName = itemCollection.substring(0,dashIndex);
+            Float itemPrice = Float.parseFloat(itemCollection.substring(dollarIndex+1, itemCollection.length()));
+
+            e.putString("CIitemName" + String.valueOf(i), itemName);
+            e.putFloat("CIitemPrice" + String.valueOf(i), itemPrice);
+        }
+
+        e.apply();
+    }
+
+    private void ClearSharedPrefAllItems(){
+        e.putInt("CInumItems", numItems);
+        for(int i = 0; i < MAX_ITEMS; i++){
+
+            e.putString("CIitemName" + String.valueOf(i), "");
+            e.putFloat("CIitemPrice" + String.valueOf(i), 0);
+        }
+
+        e.apply();
+    }
+
+    private void startList(){
+        for(int i = 0; i < numItems; i++){
+            String item = s.getString("CIitemName"+String.valueOf(i), "") + String.valueOf(s.getFloat("CIitemPrice"+String.valueOf(i), 0));
+            customUDBList.add(item);
+        }
+
+        customUDBListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+        String itemValue = (String)mItemList.getItemAtPosition(position);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(itemValue);
+
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked delete button
+                numItems--;
+                customUDBList.remove(position);
+                customUDBListAdapter.notifyDataSetChanged();
+            }
+        });
+
+        builder.setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked edit button
+                // Creating alert Dialog with one Button
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(CustomizeItem.this);
+                alertDialog.setTitle("Edit");
+
+                // Setting Dialog Message
+                alertDialog.setMessage("Enter new item name and item price");
+                Context context = CustomizeItem.this;
+                LinearLayout layout = new LinearLayout(context);
+                layout.setOrientation(LinearLayout.VERTICAL);
+
+                final EditText nameBox = new EditText(context);
+                nameBox.setHint("Item Name");
+                nameBox.setImeActionLabel("Done",EditorInfo.IME_ACTION_DONE);
+                layout.addView(nameBox);
+
+                final EditText priceBox = new EditText(context);
+                priceBox.setHint("Item Price");
+                priceBox.setImeActionLabel("Done",EditorInfo.IME_ACTION_DONE);
+                layout.addView(priceBox);
+
+                alertDialog.setView(layout);
+
+                // Setting Positive "Yes" Button
+                alertDialog.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int which) {
+                                // Write your code here to execute after dialog
+                                if(!nameBox.getText().toString().isEmpty()&&!priceBox.getText().toString().isEmpty()){
+                                    String itemCollection = nameBox.getText().toString() + " - $" + String.format("%.2f", Float.parseFloat(priceBox.getText().toString()));
+                                    customUDBList.remove(position);
+                                    customUDBList.add(position, itemCollection);
+                                }
+
+                            }
+                        });
+                // Setting Negative "NO" Button
+                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Write your code here to execute after dialog
+                                dialog.cancel();
+                            }
+                        });
+
+
+                // Showing Alert Message
+                alertDialog.show();
+
+            }
+        });
+
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //user clicked cancel button
+            }
+        });
+
+        AlertDialog alert =builder.create();
+        alert.show();
+
+        Toast.makeText(this, itemValue,Toast.LENGTH_SHORT).show();
+    }
+
 }

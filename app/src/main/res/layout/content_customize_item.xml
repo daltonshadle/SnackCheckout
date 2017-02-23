@@ -32,11 +32,12 @@
         <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:ems="10"
             android:id="@+id/CIedtItemPrice"
             android:layout_weight="1"
-            android:hint="Item Price" />
+            android:hint="Item Price"
+            android:imeOptions="actionDone"/>
 
         <Button
             android:text="Add"
