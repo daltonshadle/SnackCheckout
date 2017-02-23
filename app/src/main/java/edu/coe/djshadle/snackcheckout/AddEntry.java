@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 public class AddEntry extends AppCompatActivity implements View.OnClickListener {
 
-    TextView itemQ1, itemQ2, itemQ3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,32 +25,20 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         setSupportActionBar(toolbar);
 
         setButtons();
-        setTextFields();
+        setContorls();
     }
 
-    private void setTextFields(){
-        itemQ1 = (TextView) findViewById(R.id.txtQuantity1);
-        itemQ2 = (TextView) findViewById(R.id.txtQuantity2);
-        itemQ3 = (TextView) findViewById(R.id.txtQuantity3);
+    private void setContorls(){
+
     }
 
     private void setButtons(){
         Button cancel = (Button) findViewById(R.id.btnCancel);
         Button checkout = (Button) findViewById(R.id.btnCheckout);
-        Button m1 = (Button) findViewById(R.id.btnMinus1);
-        Button p1 = (Button) findViewById(R.id.btnPlus1);
-        Button m2 = (Button) findViewById(R.id.btnMinus2);
-        Button p2 = (Button) findViewById(R.id.btnPlus2);
-        Button m3 = (Button) findViewById(R.id.btnMinus3);
-        Button p3 = (Button) findViewById(R.id.btnPlus3);
+
         cancel.setOnClickListener(this);
         checkout.setOnClickListener(this);
-        m1.setOnClickListener(this);
-        p1.setOnClickListener(this);
-        m2.setOnClickListener(this);
-        p2.setOnClickListener(this);
-        m3.setOnClickListener(this);
-        p3.setOnClickListener(this);
+
     }
 
     @Override
@@ -75,6 +62,12 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
             return true;
         }
 
+        if (id == R.id.action_customize) {
+            Intent i = new Intent("edu.coe.djshadle.SnackCheckout.CustomizeItem");
+            startActivity(i);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -82,51 +75,10 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
     public void onClick(View v) {
         Button b = (Button) v;
         int temp;
-        if(b.getText().equals("-")){
-            if(b.getTag().toString().equals("1")){
-                temp = Integer.parseInt(itemQ1.getText().toString());
-                if(temp>0){
-                    temp--;
-                    itemQ1.setText(String.valueOf(temp));
-                }
-            }
-            if(b.getTag().toString().equals("2")){
-                temp = Integer.parseInt(itemQ2.getText().toString());
-                if(temp>0){
-                    temp--;
-                    itemQ2.setText(String.valueOf(temp));
-                }
-            }
-            if(b.getTag().toString().equals("3")){
-                temp = Integer.parseInt(itemQ3.getText().toString());
-                if(temp>0){
-                    temp--;
-                    itemQ3.setText(String.valueOf(temp));
-                }
-            }
-        }
-        if(b.getText().equals("+")){
-            if(b.getTag().toString().equals("1")){
-                temp = Integer.parseInt(itemQ1.getText().toString());
-                temp++;
-                itemQ1.setText(String.valueOf(temp));
-            }
-            if(b.getTag().toString().equals("2")){
-                temp = Integer.parseInt(itemQ2.getText().toString());
-                temp++;
-                itemQ2.setText(String.valueOf(temp));
-            }
-            if(b.getTag().toString().equals("3")){
-                temp = Integer.parseInt(itemQ3.getText().toString());
-                temp++;
-                itemQ3.setText(String.valueOf(temp));
-            }
-        }
+
         if(v.getId() == R.id.btnCheckout){
             int q1 = 0, q2 = 0, q3 = 0;
-            q1 = Integer.parseInt(itemQ1.getText().toString());
-            q2 = Integer.parseInt(itemQ2.getText().toString());
-            q3 = Integer.parseInt(itemQ3.getText().toString());
+            //get all UDboxes quantiti
 
             if (q1>0 || q2>0 || q3>0) {
                 Intent i = new Intent("edu.coe.djshadle.SnackCheckout.Checkout");
@@ -141,9 +93,7 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
             }
         }
         if(v.getId() == R.id.btnCancel) {
-            itemQ3.setText("0");
-            itemQ2.setText("0");
-            itemQ1.setText("0");
+            //set all UDboxes to 0
         }
     }
 }

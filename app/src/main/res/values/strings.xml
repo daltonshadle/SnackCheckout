@@ -4,4 +4,6 @@
     <string name="title_activity_checkout">Checkout</string>
     <string name="total_sales">Total Sales</string>
     <string name="title_activity_total_sales">Total Sales</string>
+    <string name="title_activity_customize_item">CustomizeItem</string>
+    <string name="customize_items">Customize Items</string>
 </resources>

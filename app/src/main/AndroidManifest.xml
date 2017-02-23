@@ -38,6 +38,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".CustomizeItem"
+            android:label="@string/title_activity_customize_item"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="edu.coe.djshadle.SnackCheckout.CustomizeItem" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

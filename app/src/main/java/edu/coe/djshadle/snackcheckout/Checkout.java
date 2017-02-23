@@ -84,6 +84,12 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
             return true;
         }
 
+        if (id == R.id.action_customize) {
+            Intent i = new Intent("edu.coe.djshadle.SnackCheckout.CustomizeItem");
+            startActivity(i);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

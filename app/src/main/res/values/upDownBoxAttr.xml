@@ -4,5 +4,7 @@
     <declare-styleable name="upDownBox">
         <attr name="startValue" format="integer"/>
         <attr name="startItemName" format="string"/>
+        <attr name="plusButtonColor" format="color"/>
+        <attr name="minusButtonColor" format="color"/>
     </declare-styleable>
 </resources>

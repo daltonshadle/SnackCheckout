@@ -2,6 +2,7 @@ package edu.coe.djshadle.snackcheckout;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.StringBuilderPrinter;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
 
     private Button mUpButton, mDownButton;
     private TextView mValueText, mItemName;
-    private int startVal;
+    private int startVal, plusBtnColor, minusBtnColor;
     private String startItemName;
     //m is for member variables
 
@@ -30,6 +31,8 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.upDownBox);
         startVal = ta.getInt(R.styleable.upDownBox_startValue, 0);
         startItemName = ta.getString(R.styleable.upDownBox_startItemName);
+        plusBtnColor = ta.getColor(R.styleable.upDownBox_plusButtonColor, Color.GRAY);
+        minusBtnColor = ta.getColor(R.styleable.upDownBox_minusButtonColor, Color.GRAY);
         ta.recycle();
     }
 
@@ -41,6 +44,8 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.upDownBox);
         startVal = ta.getInt(R.styleable.upDownBox_startValue, 0);
         startItemName = ta.getString(R.styleable.upDownBox_startItemName);
+        plusBtnColor = ta.getColor(R.styleable.upDownBox_plusButtonColor, Color.GRAY);
+        minusBtnColor = ta.getColor(R.styleable.upDownBox_minusButtonColor, Color.GRAY);
         ta.recycle();
     }
 
@@ -67,27 +72,37 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         mDownButton.setOnClickListener(this);
         setValue(startVal);
         setItemName(startItemName);
+        setPlusButtonColor(plusBtnColor);
+        setMinusButtonColor(minusBtnColor);
     }
 
+
+    //value getter and setter
     public int getValue(){
         return Integer.parseInt(mValueText.getText().toString());
     }
-
     public void setValue(int v){
         if(v>=0) {
             mValueText.setText(String.valueOf(v));
         }
     }
 
-
+    //item name getter and setter
     public String getItemName(){
         return mItemName.getText().toString();
     }
-
     public void setItemName(String s){
         if(s!=null && !s.isEmpty()){
            mItemName.setText(s);
         }
+    }
+
+    //buton color setters
+    public void setPlusButtonColor(int c){
+        mUpButton.setBackgroundColor(c);
+    }
+    public void setMinusButtonColor(int c){
+        mDownButton.setBackgroundColor(c);
     }
 
 
