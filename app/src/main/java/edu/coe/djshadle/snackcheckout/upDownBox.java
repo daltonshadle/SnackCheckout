@@ -28,12 +28,17 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         super(context, attrs, defStyleAttr);
         initializeViews(context);
 
+        mDownButton = (Button) findViewById(R.id.btnMinusUDB);
+        mUpButton = (Button) findViewById(R.id.btnPlusUDB);
+        mValueText = (TextView) findViewById(R.id.txtValueUDB);
+        mItemName = (TextView) findViewById(R.id.txtItemNameUDB);
+
         startItemName = "Item";
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.upDownBox);
         startVal = ta.getInt(R.styleable.upDownBox_startValue, 0);
         startItemName = ta.getString(R.styleable.upDownBox_startItemName);
-        plusBtnColor = ta.getColor(R.styleable.upDownBox_plusButtonColor, Color.GRAY);
-        minusBtnColor = ta.getColor(R.styleable.upDownBox_minusButtonColor, Color.GRAY);
+        plusBtnColor = ta.getColor(R.styleable.upDownBox_plusButtonColor, getResources().getColor(R.color.plus));
+        minusBtnColor = ta.getColor(R.styleable.upDownBox_minusButtonColor, getResources().getColor(R.color.minus));
         ta.recycle();
     }
 
@@ -41,21 +46,32 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         super(context, attrs);
         initializeViews(context);
 
+        mDownButton = (Button) findViewById(R.id.btnMinusUDB);
+        mUpButton = (Button) findViewById(R.id.btnPlusUDB);
+        mValueText = (TextView) findViewById(R.id.txtValueUDB);
+        mItemName = (TextView) findViewById(R.id.txtItemNameUDB);
+
         startItemName = "Item";
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.upDownBox);
         startVal = ta.getInt(R.styleable.upDownBox_startValue, 0);
         startItemName = ta.getString(R.styleable.upDownBox_startItemName);
-        plusBtnColor = ta.getColor(R.styleable.upDownBox_plusButtonColor, Color.GRAY);
-        minusBtnColor = ta.getColor(R.styleable.upDownBox_minusButtonColor, Color.GRAY);
+        plusBtnColor = ta.getColor(R.styleable.upDownBox_plusButtonColor, getResources().getColor(R.color.plus));
+        minusBtnColor = ta.getColor(R.styleable.upDownBox_minusButtonColor, getResources().getColor(R.color.minus));
         ta.recycle();
     }
 
     public upDownBox(Context context) {
         super(context);
         initializeViews(context);
+
+        mDownButton = (Button) findViewById(R.id.btnMinusUDB);
+        mUpButton = (Button) findViewById(R.id.btnPlusUDB);
+        mValueText = (TextView) findViewById(R.id.txtValueUDB);
+        mItemName = (TextView) findViewById(R.id.txtItemNameUDB);
+
     }
 
-    private void initializeViews(Context context){
+    public void initializeViews(Context context){
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.updownbox, this);
     }

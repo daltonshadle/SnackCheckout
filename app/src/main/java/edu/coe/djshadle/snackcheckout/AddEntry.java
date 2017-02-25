@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Xml;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
     private String TAG;
     private int numItems;
     private LinearLayout wholeLayout;
-    private upDownBox udbArray[];
+    private upDownBox[] udbArray;
     private SharedPreferences s;
     private SharedPreferences.Editor e;
 
@@ -65,28 +66,20 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         for(int i = 0; i < numItems; i++){
             String name = s.getString("CIitemName" + String.valueOf(i), "") + " - $" + String.format("%.2f", s.getFloat("CIitemPrice" + String.valueOf(i), 0));
 
-            XmlPullParser parser = getResources().getXml();
-            try {
-                parser.next();
-                parser.nextTag();
-            } catch (Exception e) {
-                e.printStackTrace();
+            udbArray[i] = new upDownBox(this);
+            if(udbArray[i]==null){
+                Log.d("Dalton", "Prob here");
             }
 
-            AttributeSet attr = Xml.asAttributeSet(parser);
-            int count = attr.getAttributeCount();
-            udbArray[i] = new upDownBox(this, attr);
-
             udbArray[i].setItemName(name);
-            udbArray[i].setPlusButtonColor(R.color.plus);
-            udbArray[i].setMinusButtonColor(R.color.minus);
 
 
             udbArray[i].setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT));
+                   LinearLayout.LayoutParams.MATCH_PARENT,
+                   LinearLayout.LayoutParams.WRAP_CONTENT));
 
-            wholeLayout.addView(udbArray[i]);
+            wholeLayout.addView(udbArray[i], i);
+
         }
     }
 
@@ -159,7 +152,7 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
     @Override
     protected void onResume(){
         super.onResume();
-
+        //need to delete old items before adding new
         setContorls();
     }
 }
