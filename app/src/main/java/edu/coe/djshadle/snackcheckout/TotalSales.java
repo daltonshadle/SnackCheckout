@@ -16,8 +16,10 @@ import org.w3c.dom.Text;
 
 public class TotalSales extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView item1, item2, item3, price1, price2, price3, total;
+    private TextView total;
     private Button reset;
+    private SharedPreferences s;
+    private SharedPreferences.Editor e;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -26,39 +28,25 @@ public class TotalSales extends AppCompatActivity implements View.OnClickListene
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        s =  getSharedPreferences("myFile", 0);
+        e = s.edit();
+
+
         setIDControls();
         setTextFields();
         setButton();
+
+        e.commit();
     }
 
     private void setIDControls(){
-        item1 = (TextView) findViewById(R.id.txtItemTotal1);
-        item2 = (TextView) findViewById(R.id.txtItemTotal2);
-        item3 = (TextView) findViewById(R.id.txtItemTotal3);
-        price1 = (TextView) findViewById(R.id.txtPriceTotal1);
-        price2 = (TextView) findViewById(R.id.txtPriceTotal2);
-        price3 = (TextView) findViewById(R.id.txtPriceTotal3);
-        total = (TextView) findViewById(R.id.txtPriceTotal);
+        //total = (TextView) findViewById(R.id.txtPriceTotal);
     }
 
     private void setTextFields(){
         float savedValue = 0;
-        SharedPreferences s = getSharedPreferences("myFile", 0);
 
-        savedValue = s.getFloat("quantityItem1", 0);
-        item1.setText(String.valueOf((int)savedValue) + " Hotdog");
-        price1.setText("$" + String.format("%.2f", savedValue));
 
-        savedValue = s.getFloat("quantityItem2", 0);
-        item2.setText(String.valueOf((int)savedValue) + " Candy");
-        price2.setText("$" + String.format("%.2f", savedValue*.75));
-
-        savedValue = s.getFloat("quantityItem3", 0);
-        item3.setText(String.valueOf((int)savedValue) + " Pop");
-        price3.setText("$" + String.format("%.2f", savedValue*1.5));
-
-        savedValue = s.getFloat("totalRevenue", 0);
-        total.setText("$" + String.format("%.2f", savedValue));
 
     }
 
@@ -76,14 +64,9 @@ public class TotalSales extends AppCompatActivity implements View.OnClickListene
         builder.setPositiveButton("Reset", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked reset button
-                SharedPreferences s = getSharedPreferences("myFile", 0);
                 SharedPreferences.Editor e = s.edit();
 
-                e.putFloat("quantityItem1", 0);
-                e.putFloat("quantityItem2", 0);
-                e.putFloat("quantityItem3", 0);
-                e.putFloat("totalRevenue", 0);
-
+                //delete all shared pref for total items if possible
                 e.apply();
 
                 setTextFields();

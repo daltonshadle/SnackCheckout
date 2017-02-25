@@ -147,6 +147,9 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
                 if(Float.parseFloat(moneyPaid.getText().toString()) >= totalPrice) {
 
                     //put all the stuff in the total thing
+
+
+
                     Intent newIntent = new Intent();
                     //newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     setResult(Activity.RESULT_OK, newIntent);
@@ -175,30 +178,51 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void putAllTextsInLayout(){
+        int pos = 0;
         for(int i = 0; i < numItems; i ++) {
-            LinearLayout temp = new LinearLayout(this);
-            temp.setOrientation(LinearLayout.HORIZONTAL);
-            temp.setLayoutParams(new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT));
+            if(s.getInt("AEitemQuantity" + String.valueOf(i), 0) != 0) {
+                LinearLayout temp = new LinearLayout(this);
+                temp.setOrientation(LinearLayout.HORIZONTAL);
+                temp.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
 
-            TextView itemName = new TextView(this);
-            TextView itemPrice = new TextView(this);
+                TextView itemName = new TextView(this);
+                TextView itemPrice = new TextView(this);
 
-            String name = s.getInt("AEitemQuantity" + String.valueOf(i), 0) + " x " + s.getString("CIitemName" + String.valueOf(i), "");
-            String price = "$" + String.format("%.2f", s.getFloat("CIitemPrice" + String.valueOf(i), 0));
+                String name = s.getInt("AEitemQuantity" + String.valueOf(i), 0) + " x " + s.getString("CIitemName" + String.valueOf(i), "");
+                String price = "$" + String.format("%.2f", s.getInt("AEitemQuantity" + String.valueOf(i), 0)*s.getFloat("CIitemPrice" + String.valueOf(i), 0));
 
-            itemName.setText(name);
-            itemPrice.setText(price);
-            itemPrice.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+                itemName.setText(name);
+                itemPrice.setText(price);
+                itemPrice.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
 
-            temp.addView(itemName);
-            temp.addView(itemPrice);
+                temp.addView(itemName);
+                temp.addView(itemPrice);
 
 
-            wholeLayout.addView(temp, i);
+                wholeLayout.addView(temp, pos);
+                pos++;
+            }
         }
     }
 
+    private void updateAllItemsInTotal(){
+
+        //save key as the name of the item
+        //how to retrieve item?
+
+
+        for(int i = 0; i < numItems; i++){
+            float tempTotal = s.getFloat("CIitemPrice" + String.valueOf(i), 0);
+            int tempItemQuant = s.getInt("AEitemQuantity" + String.valueOf(i), 0);
+            String tempName = s.getString("CIitemName" + String.valueOf(i), "");
+
+            
+
+
+
+        }
+    }
 
 }
