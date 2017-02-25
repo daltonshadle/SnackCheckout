@@ -2,13 +2,17 @@ package edu.coe.djshadle.snackcheckout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Xml;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,8 +21,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.xmlpull.v1.XmlPullParser;
+
 public class AddEntry extends AppCompatActivity implements View.OnClickListener {
 
+    private String TAG;
     private int numItems;
     private LinearLayout wholeLayout;
     private upDownBox udbArray[];
@@ -31,6 +38,7 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_add_entry);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        TAG = "Dalton";
         s = getSharedPreferences("myFile", 0);
         e = s.edit();
 
@@ -43,16 +51,41 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
     }
 
     private void setContorls(){
+        Log.d(TAG, "Got in the function");
         numItems = s.getInt("CInumItems", 0);
         udbArray = new upDownBox[8];
         wholeLayout = (LinearLayout) findViewById(R.id.content_add_entry);
 
+        TypedArray a = this.obtainStyledAttributes(R.styleable.upDownBox);
+
+
+        a.recycle();
+
+
         for(int i = 0; i < numItems; i++){
-            String name = s.getString("CIitemName" + String.valueOf(i), "") + " - $" + String.valueOf(s.getFloat("CIitemPrice" + String.valueOf(i), 0));
-            udbArray[i] = new upDownBox(this);
+            String name = s.getString("CIitemName" + String.valueOf(i), "") + " - $" + String.format("%.2f", s.getFloat("CIitemPrice" + String.valueOf(i), 0));
+
+            XmlPullParser parser = getResources().getXml();
+            try {
+                parser.next();
+                parser.nextTag();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            AttributeSet attr = Xml.asAttributeSet(parser);
+            int count = attr.getAttributeCount();
+            udbArray[i] = new upDownBox(this, attr);
+
             udbArray[i].setItemName(name);
             udbArray[i].setPlusButtonColor(R.color.plus);
             udbArray[i].setMinusButtonColor(R.color.minus);
+
+
+            udbArray[i].setLayoutParams(new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT));
+
             wholeLayout.addView(udbArray[i]);
         }
     }
@@ -122,4 +155,11 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        setContorls();
+    }
 }

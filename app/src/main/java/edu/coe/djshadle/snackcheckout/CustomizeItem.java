@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -111,7 +112,7 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
 
         switch (v.getId()) {
             case R.id.CIbtnAdd:
-                if (numItems < 9) {
+                if (numItems < MAX_ITEMS) {
                     if (!itemName.isEmpty() && !stringItemPrice.isEmpty()) {
                         float itemPrice = Float.parseFloat(stringItemPrice);
                         String itemCollection = itemName + " - $" + String.format("%.2f", itemPrice);
@@ -169,7 +170,7 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
         for(int i = 0; i < numItems; i++){
             String itemCollection = customUDBList.get(i);
             int dashIndex = itemCollection.indexOf("-"), dollarIndex = itemCollection.indexOf("$");
-            String itemName = itemCollection.substring(0,dashIndex);
+            String itemName = itemCollection.substring(0,dashIndex-1);
             Float itemPrice = Float.parseFloat(itemCollection.substring(dollarIndex+1, itemCollection.length()));
 
             e.putString("CIitemName" + String.valueOf(i), itemName);
@@ -192,7 +193,7 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
 
     private void startList(){
         for(int i = 0; i < numItems; i++){
-            String item = s.getString("CIitemName"+String.valueOf(i), "") + String.valueOf(s.getFloat("CIitemPrice"+String.valueOf(i), 0));
+            String item = s.getString("CIitemName"+String.valueOf(i), "") + " - $" + String.format("%.2f", s.getFloat("CIitemPrice"+String.valueOf(i), 0));
             customUDBList.add(item);
         }
 
@@ -234,6 +235,7 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
 
                 final EditText priceBox = new EditText(context);
                 priceBox.setHint("Item Price");
+                priceBox.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 priceBox.setImeActionLabel("Done",EditorInfo.IME_ACTION_DONE);
                 layout.addView(priceBox);
 
@@ -247,6 +249,7 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
                                     String itemCollection = nameBox.getText().toString() + " - $" + String.format("%.2f", Float.parseFloat(priceBox.getText().toString()));
                                     customUDBList.remove(position);
                                     customUDBList.add(position, itemCollection);
+                                    customUDBListAdapter.notifyDataSetChanged();
                                 }
 
                             }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.StringBuilderPrinter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -92,8 +93,13 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         return mItemName.getText().toString();
     }
     public void setItemName(String s){
-        if(s!=null && !s.isEmpty()){
-           mItemName.setText(s);
+        if(s!=null){
+            if(!s.isEmpty()) {
+                Log.d("Dalton", "Set name function");
+                Log.d("Dalton", s);
+                mItemName.setText(s);
+                Log.d("Dalton", s + " After");
+            }
         }
     }
 
