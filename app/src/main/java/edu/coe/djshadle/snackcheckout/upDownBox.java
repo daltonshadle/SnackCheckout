@@ -28,10 +28,7 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         super(context, attrs, defStyleAttr);
         initializeViews(context);
 
-        mDownButton = (Button) findViewById(R.id.btnMinusUDB);
-        mUpButton = (Button) findViewById(R.id.btnPlusUDB);
-        mValueText = (TextView) findViewById(R.id.txtValueUDB);
-        mItemName = (TextView) findViewById(R.id.txtItemNameUDB);
+        setAllViews();
 
         startItemName = "Item";
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.upDownBox);
@@ -46,10 +43,7 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         super(context, attrs);
         initializeViews(context);
 
-        mDownButton = (Button) findViewById(R.id.btnMinusUDB);
-        mUpButton = (Button) findViewById(R.id.btnPlusUDB);
-        mValueText = (TextView) findViewById(R.id.txtValueUDB);
-        mItemName = (TextView) findViewById(R.id.txtItemNameUDB);
+        setAllViews();
 
         startItemName = "Item";
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.upDownBox);
@@ -64,16 +58,23 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         super(context);
         initializeViews(context);
 
-        mDownButton = (Button) findViewById(R.id.btnMinusUDB);
-        mUpButton = (Button) findViewById(R.id.btnPlusUDB);
-        mValueText = (TextView) findViewById(R.id.txtValueUDB);
-        mItemName = (TextView) findViewById(R.id.txtItemNameUDB);
+        setAllViews();
 
     }
 
     public void initializeViews(Context context){
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.updownbox, this);
+    }
+
+    private void setAllViews(){
+        mDownButton = (Button) findViewById(R.id.btnMinusUDB);
+        mUpButton = (Button) findViewById(R.id.btnPlusUDB);
+        mValueText = (TextView) findViewById(R.id.txtValueUDB);
+        mItemName = (TextView) findViewById(R.id.txtItemNameUDB);
+
+        mUpButton.setOnClickListener(this);
+        mDownButton.setOnClickListener(this);
     }
 
     @Override

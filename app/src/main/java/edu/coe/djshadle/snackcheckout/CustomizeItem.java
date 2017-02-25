@@ -56,6 +56,8 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
 
         setControls();
         startList();
+
+        e.commit();
     }
 
     private void setControls(){
@@ -177,7 +179,7 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
             e.putFloat("CIitemPrice" + String.valueOf(i), itemPrice);
         }
 
-        e.apply();
+        e.commit();
     }
 
     private void ClearSharedPrefAllItems(){
@@ -188,7 +190,7 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
             e.putFloat("CIitemPrice" + String.valueOf(i), 0);
         }
 
-        e.apply();
+        e.commit();
     }
 
     private void startList(){

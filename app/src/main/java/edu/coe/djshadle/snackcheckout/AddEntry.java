@@ -1,5 +1,6 @@
 package edu.coe.djshadle.snackcheckout;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -39,7 +40,7 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         setContentView(R.layout.activity_add_entry);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        TAG = "Dalton";
+
         s = getSharedPreferences("myFile", 0);
         e = s.edit();
 
@@ -67,12 +68,8 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
             String name = s.getString("CIitemName" + String.valueOf(i), "") + " - $" + String.format("%.2f", s.getFloat("CIitemPrice" + String.valueOf(i), 0));
 
             udbArray[i] = new upDownBox(this);
-            if(udbArray[i]==null){
-                Log.d("Dalton", "Prob here");
-            }
 
             udbArray[i].setItemName(name);
-
 
             udbArray[i].setLayoutParams(new LinearLayout.LayoutParams(
                    LinearLayout.LayoutParams.MATCH_PARENT,
@@ -109,13 +106,13 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sales) {
             Intent i = new Intent("edu.coe.djshadle.SnackCheckout.TotalSales");
-            startActivity(i);
+            startActivityForResult(i, 1);
             return true;
         }
 
         if (id == R.id.action_customize) {
             Intent i = new Intent("edu.coe.djshadle.SnackCheckout.CustomizeItem");
-            startActivity(i);
+            startActivityForResult(i, 1);
             return true;
         }
 
@@ -128,16 +125,12 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         int temp;
 
         if(v.getId() == R.id.btnCheckout){
-            int q1 = 0, q2 = 0, q3 = 0;
-            //get all UDboxes quantiti
+            //get all UDboxes quantities
 
-            if (q1>0 || q2>0 || q3>0) {
+            if (checkItemQuantities()) {
+
+                putInfoInSharedPrefForCheckout();
                 Intent i = new Intent("edu.coe.djshadle.SnackCheckout.Checkout");
-
-                i.putExtra("q1", q1);
-                i.putExtra("q2", q2);
-                i.putExtra("q3", q3);
-
                 startActivity(i);
             } else {
                 Toast.makeText(this, "Please enter a quantity", Toast.LENGTH_SHORT).show();
@@ -145,6 +138,8 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         }
         if(v.getId() == R.id.btnCancel) {
             //set all UDboxes to 0
+            resetItemQuantities();
+
         }
     }
 
@@ -153,6 +148,48 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
     protected void onResume(){
         super.onResume();
         //need to delete old items before adding new
+        wholeLayout.removeViewsInLayout(0, numItems);
+
         setContorls();
+
+    }
+
+    private boolean checkItemQuantities(){
+        boolean someHaveQuantites = false;
+        int i = 0;
+
+        while(!someHaveQuantites && i < numItems){
+            someHaveQuantites = (udbArray[i].getValue() > 0);
+            i++;
+        }
+
+        return someHaveQuantites;
+    }
+
+    private void resetItemQuantities(){
+        for (int i = 0; i < numItems; i++){
+            udbArray[i].setValue(0);
+        }
+    }
+
+    private void putInfoInSharedPrefForCheckout(){
+        for (int i = 0; i < numItems; i++){
+            e.putInt("AEitemQuantity" + String.valueOf(i), udbArray[i].getValue());
+        }
+
+        e.commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                resetItemQuantities();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                resetItemQuantities();
+            }
+        }
     }
 }
