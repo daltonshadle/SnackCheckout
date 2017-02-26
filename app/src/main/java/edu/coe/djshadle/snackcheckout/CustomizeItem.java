@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CustomizeItem extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
@@ -38,8 +41,8 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
     private Button mAddButton, mSaveButton, mResetButton;
     private ArrayList<String> customUDBList;
     private ArrayAdapter<String> customUDBListAdapter;
-    private SharedPreferences s;
-    private SharedPreferences.Editor e;
+    private SharedPreferences s, totalShared;
+    private SharedPreferences.Editor e, totalEdit;
 
 
 
@@ -47,17 +50,19 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customize_item);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         s = getSharedPreferences("myFile", 0);
         e = s.edit();
         numItems = s.getInt("CInumItems", 0);
 
+        totalShared = getSharedPreferences("myTotalMine", 0);
+        totalEdit = totalShared.edit();
+
         setControls();
         startList();
 
         e.commit();
+        totalEdit.commit();
     }
 
     private void setControls(){
@@ -79,34 +84,6 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
         mItemList.setOnItemClickListener(this);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_entry, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_sales) {
-            Intent i = new Intent("edu.coe.djshadle.SnackCheckout.TotalSales");
-            startActivity(i);
-            return true;
-        }
-        if (id == R.id.action_customize) {
-            Intent i = new Intent("edu.coe.djshadle.SnackCheckout.CustomizeItem");
-            startActivity(i);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onClick(View v) {
@@ -141,6 +118,7 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
                         customUDBList.clear();
                         customUDBListAdapter.notifyDataSetChanged();
                         ClearSharedPrefAllItems();
+                        e.clear();
                     }
                 });
 
@@ -169,6 +147,8 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
 
     private void SharedPrefAllItems(){
         e.putInt("CInumItems", numItems);
+        Set<String> keys = totalShared.getStringSet("Keys", new HashSet<String>());
+
         for(int i = 0; i < numItems; i++){
             String itemCollection = customUDBList.get(i);
             int dashIndex = itemCollection.indexOf("-"), dollarIndex = itemCollection.indexOf("$");
@@ -177,19 +157,20 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
 
             e.putString("CIitemName" + String.valueOf(i), itemName);
             e.putFloat("CIitemPrice" + String.valueOf(i), itemPrice);
+
+            keys.add(itemName);
         }
+        totalEdit.putStringSet("Keys", keys);
+        Log.d("DA", String.valueOf(keys.size()));
+        totalEdit.putInt("numTotalItems", keys.size());
 
         e.commit();
+        totalEdit.commit();
     }
 
     private void ClearSharedPrefAllItems(){
-        e.putInt("CInumItems", numItems);
-        for(int i = 0; i < MAX_ITEMS; i++){
-
-            e.putString("CIitemName" + String.valueOf(i), "");
-            e.putFloat("CIitemPrice" + String.valueOf(i), 0);
-        }
-
+        e.clear();
+        e.putInt("CInumItems", 0);
         e.commit();
     }
 
@@ -211,6 +192,7 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked delete button
+                deleteOneSharePref(position);
                 numItems--;
                 customUDBList.remove(position);
                 customUDBListAdapter.notifyDataSetChanged();
@@ -284,4 +266,15 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
         Toast.makeText(this, itemValue,Toast.LENGTH_SHORT).show();
     }
 
+
+    private void deleteOneSharePref(int pos){
+
+        e.remove("CIitemName" + String.valueOf(pos));
+        e.remove("CIitemPrice" + String.valueOf(pos));
+
+        for(int i = pos; i < numItems; i++){
+            e.putString("CIitemName" + String.valueOf(i), s.getString("CIitemName" + String.valueOf(i+1), ""));
+            e.putInt("CIitemPrice" + String.valueOf(i), s.getInt("CIitemPrice" + String.valueOf(i+1), 0));
+        }
+    }
 }

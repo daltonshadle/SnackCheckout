@@ -8,18 +8,25 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class TotalSales extends AppCompatActivity implements View.OnClickListener {
 
     private TextView total;
+    private LinearLayout textLayout;
     private Button reset;
-    private SharedPreferences s;
-    private SharedPreferences.Editor e;
+    private SharedPreferences s, totalShared;
+    private SharedPreferences.Editor e, totalEdit;
+    private int numItems, numTotalItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -30,7 +37,12 @@ public class TotalSales extends AppCompatActivity implements View.OnClickListene
 
         s =  getSharedPreferences("myFile", 0);
         e = s.edit();
+        totalShared = getSharedPreferences("myTotalFile", 0);
+        totalEdit = totalShared.edit();
 
+        numItems = s.getInt("CInumItems", 0);
+        numTotalItems = totalShared.getInt("numTotalItems", 0);
+        Log.d("DA", "numTotalItems = " + String.valueOf(numTotalItems));
 
         setIDControls();
         setTextFields();
@@ -40,12 +52,34 @@ public class TotalSales extends AppCompatActivity implements View.OnClickListene
     }
 
     private void setIDControls(){
-        //total = (TextView) findViewById(R.id.txtPriceTotal);
+        total = (TextView) findViewById(R.id.txtPriceTotal);
+        textLayout = (LinearLayout) findViewById(R.id.lnrLayoutText);
     }
 
     private void setTextFields(){
         float savedValue = 0;
+        Set<String> keys = totalShared.getStringSet("Keys", new HashSet<String>());
+        int temp = keys.size();
 
+        Log.d("DA", "Got in the setTextFields function");
+
+        if(keys!=null) {
+            String[] names = keys.toArray(new String[keys.size()]);
+            Log.d("DA", String.valueOf(numItems));
+            Log.d("DA", String.valueOf(numTotalItems));
+
+            for (int i = 0; i < temp; i++) {
+                String name = names[i];
+
+                TextView t = new TextView(this);
+                t.setText(name);
+
+                textLayout.addView(t, i);
+
+                Log.d("DA", name);
+
+            }
+        }
 
 
     }
@@ -64,12 +98,12 @@ public class TotalSales extends AppCompatActivity implements View.OnClickListene
         builder.setPositiveButton("Reset", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked reset button
-                SharedPreferences.Editor e = s.edit();
 
                 //delete all shared pref for total items if possible
-                e.apply();
-
-                setTextFields();
+                totalEdit.clear();
+                textLayout.removeAllViewsInLayout();
+                textLayout.removeAllViews();
+                totalEdit.commit();
             }
         });
 

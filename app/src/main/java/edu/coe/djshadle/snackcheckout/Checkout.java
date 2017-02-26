@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.DecimalFormat;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringDef;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,15 +24,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 public class Checkout extends AppCompatActivity implements View.OnClickListener {
 
-    private LinearLayout wholeLayout;
+    private LinearLayout checkoutLayout;
     private TextView totalText, changeText;
     private EditText moneyPaid;
     private int numItems;
     private float totalPrice;
-    private SharedPreferences s;
-    private SharedPreferences.Editor e;
+    private SharedPreferences s, totalShared;
+    private SharedPreferences.Editor e, totalEdit;
 
 
     @Override
@@ -44,6 +50,8 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
 
         s = getSharedPreferences("myFile", 0);
         e = s.edit();
+        totalShared = getSharedPreferences("myTotalFile", 0);
+        totalEdit = totalShared.edit();
 
         numItems = s.getInt("CInumItems", 0);
         totalPrice = calcTotalPrice();
@@ -69,16 +77,19 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
 
             @Override
             public void afterTextChanged(Editable s) {
-                float paid = Float.parseFloat(moneyPaid.getText().toString());
-                float change = paid - totalPrice;
+                if(!moneyPaid.getText().toString().isEmpty()) {
+                    float paid = Float.parseFloat(moneyPaid.getText().toString());
+                    float change = paid - totalPrice;
 
-                changeText.setText("$" + String.format("%.2f", change));
+                    changeText.setText("$" + String.format("%.2f", change));
+                }
 
             }
         });
 
 
         e.commit();
+        totalEdit.commit();
     }
 
     @Override
@@ -113,7 +124,7 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
 
     private void setViews(){
         moneyPaid = (EditText) findViewById(R.id.edtMoneyPaid);
-        wholeLayout = (LinearLayout) findViewById(R.id.content_checkout);
+        checkoutLayout = (LinearLayout) findViewById(R.id.lnrLayoutCheckout);
         changeText = (TextView) findViewById(R.id.txtChange);
         totalText = (TextView) findViewById(R.id.txtTotal);
 
@@ -147,7 +158,7 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
                 if(Float.parseFloat(moneyPaid.getText().toString()) >= totalPrice) {
 
                     //put all the stuff in the total thing
-
+                    updateAllItemsInTotal();
 
 
                     Intent newIntent = new Intent();
@@ -181,11 +192,11 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
         int pos = 0;
         for(int i = 0; i < numItems; i ++) {
             if(s.getInt("AEitemQuantity" + String.valueOf(i), 0) != 0) {
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 2.0f);
+
                 LinearLayout temp = new LinearLayout(this);
                 temp.setOrientation(LinearLayout.HORIZONTAL);
-                temp.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                temp.setLayoutParams(lp);
 
                 TextView itemName = new TextView(this);
                 TextView itemPrice = new TextView(this);
@@ -193,15 +204,19 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
                 String name = s.getInt("AEitemQuantity" + String.valueOf(i), 0) + " x " + s.getString("CIitemName" + String.valueOf(i), "");
                 String price = "$" + String.format("%.2f", s.getInt("AEitemQuantity" + String.valueOf(i), 0)*s.getFloat("CIitemPrice" + String.valueOf(i), 0));
 
+                LinearLayout.LayoutParams textLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
                 itemName.setText(name);
+                itemName.setLayoutParams(textLP);
+
                 itemPrice.setText(price);
+                itemPrice.setLayoutParams(textLP);
                 itemPrice.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
 
                 temp.addView(itemName);
                 temp.addView(itemPrice);
 
 
-                wholeLayout.addView(temp, pos);
+                checkoutLayout.addView(temp, pos);
                 pos++;
             }
         }
@@ -211,18 +226,28 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
 
         //save key as the name of the item
         //how to retrieve item?
-
+        Set<String> keys = totalShared.getStringSet("Keys", new HashSet<String>());
 
         for(int i = 0; i < numItems; i++){
-            float tempTotal = s.getFloat("CIitemPrice" + String.valueOf(i), 0);
-            int tempItemQuant = s.getInt("AEitemQuantity" + String.valueOf(i), 0);
             String tempName = s.getString("CIitemName" + String.valueOf(i), "");
+            float tempTotal = s.getFloat("TotalPrice" + tempName, 0);
+            int tempItemQuant = s.getInt("TotalQuant" + tempName, 0);
 
-            
+
+            tempTotal += s.getFloat("CIitemPrice" + String.valueOf(i), 0) * s.getInt("AEitemQuantity" + String.valueOf(i), 0);
+            tempItemQuant +=s.getInt("AEitemQuantity" + String.valueOf(i), 0);
 
 
-
+            totalEdit.putFloat("TotalPrice" + tempName, tempTotal);
+            totalEdit.putInt("TotalQuant" + tempName, tempItemQuant);
+            if(!keys.contains(tempName)) {
+                keys.add(tempName);
+            }
         }
+
+        totalEdit.putStringSet("Keys", keys);
+        totalEdit.commit();
+
     }
 
 }

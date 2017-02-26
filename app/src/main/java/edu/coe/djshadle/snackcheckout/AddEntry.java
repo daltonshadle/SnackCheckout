@@ -29,7 +29,7 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
 
     private String TAG;
     private int numItems;
-    private LinearLayout wholeLayout;
+    private LinearLayout udbLayout;
     private upDownBox[] udbArray;
     private SharedPreferences s;
     private SharedPreferences.Editor e;
@@ -41,28 +41,22 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        TAG = "Dalton";
+
         s = getSharedPreferences("myFile", 0);
         e = s.edit();
 
-        //only temp
-        e.putInt("CInumItems", 0);
-        e.apply();
-
         setButtons();
         setContorls();
+
+        e.commit();
     }
 
     private void setContorls(){
         Log.d(TAG, "Got in the function");
         numItems = s.getInt("CInumItems", 0);
         udbArray = new upDownBox[8];
-        wholeLayout = (LinearLayout) findViewById(R.id.content_add_entry);
-
-        TypedArray a = this.obtainStyledAttributes(R.styleable.upDownBox);
-
-
-        a.recycle();
-
+        udbLayout = (LinearLayout) findViewById(R.id.lnrLayoutUDB);
 
         for(int i = 0; i < numItems; i++){
             String name = s.getString("CIitemName" + String.valueOf(i), "") + " - $" + String.format("%.2f", s.getFloat("CIitemPrice" + String.valueOf(i), 0));
@@ -75,7 +69,7 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
                    LinearLayout.LayoutParams.MATCH_PARENT,
                    LinearLayout.LayoutParams.WRAP_CONTENT));
 
-            wholeLayout.addView(udbArray[i], i);
+            udbLayout.addView(udbArray[i], i);
 
         }
     }
@@ -121,8 +115,6 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
-        Button b = (Button) v;
-        int temp;
 
         if(v.getId() == R.id.btnCheckout){
             //get all UDboxes quantities
@@ -148,10 +140,8 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
     protected void onResume(){
         super.onResume();
         //need to delete old items before adding new
-        wholeLayout.removeViewsInLayout(0, numItems);
-
+        udbLayout.removeAllViewsInLayout();
         setContorls();
-
     }
 
     private boolean checkItemQuantities(){
