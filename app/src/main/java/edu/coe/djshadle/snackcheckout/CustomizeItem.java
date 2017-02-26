@@ -50,6 +50,8 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customize_item);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         s = getSharedPreferences("myFile", 0);
         e = s.edit();
@@ -192,8 +194,9 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked delete button
-                deleteOneSharePref(position);
                 numItems--;
+                deleteOneSharePref(position);
+                //numItems--;
                 customUDBList.remove(position);
                 customUDBListAdapter.notifyDataSetChanged();
             }

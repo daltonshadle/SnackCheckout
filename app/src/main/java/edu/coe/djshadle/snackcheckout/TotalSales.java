@@ -65,18 +65,38 @@ public class TotalSales extends AppCompatActivity implements View.OnClickListene
 
         if(keys!=null) {
             String[] names = keys.toArray(new String[keys.size()]);
+
             Log.d("DA", String.valueOf(numItems));
             Log.d("DA", String.valueOf(numTotalItems));
 
             for (int i = 0; i < temp; i++) {
                 String name = names[i];
+                int quant = totalShared.getInt("TotalQuant" + name, 0);
 
-                TextView t = new TextView(this);
-                t.setText(name);
+                if(quant != 0) {
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 2.0f);
 
-                textLayout.addView(t, i);
+                    LinearLayout tempLayout = new LinearLayout(this);
+                    tempLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    tempLayout.setLayoutParams(lp);
 
-                Log.d("DA", name);
+                    TextView itemName = new TextView(this);
+                    TextView itemQuant = new TextView(this);
+
+                    LinearLayout.LayoutParams textLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+                    itemName.setText(name);
+                    itemName.setLayoutParams(textLP);
+
+                    itemQuant.setText(String.valueOf(quant));
+                    itemQuant.setLayoutParams(textLP);
+                    itemQuant.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+
+                    tempLayout.addView(itemName);
+                    tempLayout.addView(itemQuant);
+
+
+                    textLayout.addView(tempLayout);
+                }
 
             }
         }
