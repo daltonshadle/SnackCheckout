@@ -22,6 +22,7 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
     private TextView mValueText, mItemName;
     private int startVal, plusBtnColor, minusBtnColor;
     private String startItemName;
+    private onUpDownChangeListener mListener;
     //m is for member variables
 
     public upDownBox(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -142,5 +143,10 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
         }
 
         setValue(val);
+        mListener.onUpDownChange();
+    }
+
+    public void setUpDownChangeListener(onUpDownChangeListener listener) {
+        mListener = listener;
     }
 }

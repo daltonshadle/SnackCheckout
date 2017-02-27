@@ -19,13 +19,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 
-public class AddEntry extends AppCompatActivity implements View.OnClickListener {
+public class AddEntry extends AppCompatActivity implements View.OnClickListener, onUpDownChangeListener {
 
     private String TAG;
     private int numItems;
@@ -33,6 +34,8 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
     private upDownBox[] udbArray;
     private SharedPreferences s;
     private SharedPreferences.Editor e;
+    private TextView runningTotal;
+    private float total;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,7 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        total = 0;
         TAG = "Dalton";
 
         s = getSharedPreferences("myFile", 0);
@@ -52,8 +56,30 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         e.commit();
     }
 
+    public void onSaveInstanceState(Bundle savedInstance){
+        //savedInstance.putInt("UD1", ud1.getValue());
+
+        for(int i = 0; i < numItems; i++){
+            savedInstance.putInt("UDB" + String.valueOf(i), udbArray[i].getValue());
+        }
+        savedInstance.putFloat("RunningTotal", total);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstance){
+        //int ud1Val = savedInstance.getInt("UD1");
+
+        for(int i = 0; i < numItems; i++){
+            udbArray[i].setValue(savedInstance.getInt("UDB" + String.valueOf(i), 0));
+        }
+
+        float tempTot = savedInstance.getFloat("RunningTotal", 0);
+        runningTotal.setText("$" + String.format("%.2f", tempTot));
+    }
+
     private void setContorls(){
         Log.d(TAG, "Got in the function");
+        runningTotal = (TextView) findViewById(R.id.txtRunningTotal);
         numItems = s.getInt("CInumItems", 0);
         udbArray = new upDownBox[8];
         udbLayout = (LinearLayout) findViewById(R.id.lnrLayoutUDB);
@@ -64,6 +90,7 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
             udbArray[i] = new upDownBox(this);
 
             udbArray[i].setItemName(name);
+            udbArray[i].setUpDownChangeListener(this);
 
             udbArray[i].setLayoutParams(new LinearLayout.LayoutParams(
                    LinearLayout.LayoutParams.MATCH_PARENT,
@@ -129,9 +156,8 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
             }
         }
         if(v.getId() == R.id.btnCancel) {
-            //set all UDboxes to 0
+            //set all UDboxes and total to 0
             resetItemQuantities();
-
         }
     }
 
@@ -160,6 +186,7 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
         for (int i = 0; i < numItems; i++){
             udbArray[i].setValue(0);
         }
+        runningTotal.setText("$0.00");
     }
 
     private void putInfoInSharedPrefForCheckout(){
@@ -181,5 +208,18 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener 
                 resetItemQuantities();
             }
         }
+    }
+
+    @Override
+    public void onUpDownChange() {
+        total = 0;
+        for(int i = 0; i < numItems; i++){
+            int quant = udbArray[i].getValue();
+            float price = s.getFloat("CIitemPrice" + String.valueOf(i), 0);
+
+            total+= quant * price;
+        }
+
+        runningTotal.setText("$" + String.format("%.2f", total));
     }
 }

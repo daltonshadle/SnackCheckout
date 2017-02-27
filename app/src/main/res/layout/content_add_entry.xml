@@ -20,22 +20,42 @@
         android:id="@+id/lnrLayoutUDB">
     </LinearLayout>
 
-    <Button
-        android:text="Checkout"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnCheckout"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:backgroundTint="@color/colorPrimary" />
+        android:layout_centerHorizontal="true"
+        android:id="@+id/lnrLayoutAddEntryButtons">
 
-    <Button
-        android:text="Cancel"
-        android:layout_width="match_parent"
+        <Button
+            android:text="Cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCancel"
+            android:backgroundTint="@color/minus"
+            android:layout_weight="1"
+            android:layout_above="@+id/btnCheckout"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:text="Checkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnCheckout"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_weight="1"
+            android:layout_above="@+id/lnrLayoutAddEntryButtons"
+            android:layout_alignParentStart="true" />
+    </LinearLayout>
+
+    <TextView
+        android:text="$0.00"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnCancel"
-        android:backgroundTint="@color/minus"
-        android:layout_above="@+id/btnCheckout"
-        android:layout_alignParentStart="true" />
+        android:layout_above="@+id/lnrLayoutAddEntryButtons"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/txtRunningTotal" />
 
 </RelativeLayout>
