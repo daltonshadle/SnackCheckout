@@ -163,7 +163,7 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
             keys.add(itemName);
         }
         totalEdit.putStringSet("Keys", keys);
-        Log.d("DA", String.valueOf(keys.size()));
+        //Log.d("DA", String.valueOf(keys.size()));
         totalEdit.putInt("numTotalItems", keys.size());
 
         e.commit();

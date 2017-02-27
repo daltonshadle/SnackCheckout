@@ -113,10 +113,7 @@ public class upDownBox extends LinearLayout implements View.OnClickListener {
     public void setItemName(String s){
         if(s!=null){
             if(!s.isEmpty()) {
-                Log.d("Dalton", "Set name function");
-                Log.d("Dalton", s);
                 mItemName.setText(s);
-                Log.d("Dalton", s + " After");
             }
         }
     }

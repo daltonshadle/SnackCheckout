@@ -32,8 +32,8 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
     private int numItems;
     private LinearLayout udbLayout;
     private upDownBox[] udbArray;
-    private SharedPreferences s;
-    private SharedPreferences.Editor e;
+    private SharedPreferences s, quantRestore;
+    private SharedPreferences.Editor e, quantRestoreE;
     private TextView runningTotal;
     private float total;
 
@@ -50,35 +50,19 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
         s = getSharedPreferences("myFile", 0);
         e = s.edit();
 
+        quantRestore = getSharedPreferences("tempQuant", 0);
+        quantRestoreE = quantRestore.edit();
+
         setButtons();
         setContorls();
 
         e.commit();
-    }
+        quantRestoreE.commit();
 
-    public void onSaveInstanceState(Bundle savedInstance){
-        //savedInstance.putInt("UD1", ud1.getValue());
-
-        for(int i = 0; i < numItems; i++){
-            savedInstance.putInt("UDB" + String.valueOf(i), udbArray[i].getValue());
-        }
-        savedInstance.putFloat("RunningTotal", total);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstance){
-        //int ud1Val = savedInstance.getInt("UD1");
-
-        for(int i = 0; i < numItems; i++){
-            udbArray[i].setValue(savedInstance.getInt("UDB" + String.valueOf(i), 0));
-        }
-
-        float tempTot = savedInstance.getFloat("RunningTotal", 0);
-        runningTotal.setText("$" + String.format("%.2f", tempTot));
+        Log.d(TAG, "OnCreate");
     }
 
     private void setContorls(){
-        Log.d(TAG, "Got in the function");
         runningTotal = (TextView) findViewById(R.id.txtRunningTotal);
         numItems = s.getInt("CInumItems", 0);
         udbArray = new upDownBox[8];
@@ -107,7 +91,6 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
 
         cancel.setOnClickListener(this);
         checkout.setOnClickListener(this);
-
     }
 
     @Override
@@ -150,7 +133,8 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
 
                 putInfoInSharedPrefForCheckout();
                 Intent i = new Intent("edu.coe.djshadle.SnackCheckout.Checkout");
-                startActivity(i);
+                startActivityForResult(i, 1);
+                //startActivity(i);
             } else {
                 Toast.makeText(this, "Please enter a quantity", Toast.LENGTH_SHORT).show();
             }
@@ -159,15 +143,6 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
             //set all UDboxes and total to 0
             resetItemQuantities();
         }
-    }
-
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-        //need to delete old items before adding new
-        udbLayout.removeAllViewsInLayout();
-        setContorls();
     }
 
     private boolean checkItemQuantities(){
@@ -183,9 +158,19 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
     }
 
     private void resetItemQuantities(){
+        for(int i = 0; i < numItems; i++){
+            quantRestoreE.putInt(String.valueOf(i), 0);
+        }
+
+        total = 0;
+        quantRestoreE.putFloat("total", total);
+
+        quantRestoreE.commit();
+
         for (int i = 0; i < numItems; i++){
             udbArray[i].setValue(0);
         }
+
         runningTotal.setText("$0.00");
     }
 
@@ -203,9 +188,11 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
                 resetItemQuantities();
+                Log.d(TAG, "OnCheckout");
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 resetItemQuantities();
+                Log.d(TAG, "OnCancelledCheckout");
             }
         }
     }
@@ -221,5 +208,40 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
         }
 
         runningTotal.setText("$" + String.format("%.2f", total));
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        //need to delete old items before adding new
+        udbLayout.removeAllViewsInLayout();
+        setContorls();
+        restoreValues();
+        Log.d(TAG, "OnResume");
+    }
+    
+    @Override
+    protected void onPause(){
+        super.onPause();
+
+        for(int i = 0; i < numItems; i++){
+            int quant = udbArray[i].getValue();
+            quantRestoreE.putInt(String.valueOf(i), quant);
+        }
+
+        quantRestoreE.putFloat("total", total);
+
+        quantRestoreE.commit();
+        Log.d(TAG, "OnPause");
+    }
+
+    private void restoreValues(){
+        for(int i = 0; i < numItems; i++){
+            int quant = quantRestore.getInt(String.valueOf(i), 0);
+            udbArray[i].setValue(quant);
+        }
+
+        float temp = quantRestore.getFloat("total", 0);
+        runningTotal.setText("$" + String.format("%.2f", temp));
     }
 }
