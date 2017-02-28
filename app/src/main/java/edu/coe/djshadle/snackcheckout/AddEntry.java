@@ -30,6 +30,7 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
 
     private String TAG;
     private int numItems;
+    private Button customizeItemBtn;
     private LinearLayout udbLayout;
     private upDownBox[] udbArray;
     private SharedPreferences s, quantRestore;
@@ -61,11 +62,17 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
 
         Log.d(TAG, "OnCreate");
 
-        /*
-        if(udbLayout.getChildCount() == 0){
+    }
 
+    private void newItemButton(){
+        if(udbLayout.getChildCount() == 0){
+            customizeItemBtn = new Button(this);
+            customizeItemBtn.setId(R.id.btnAddFirstItem);
+            customizeItemBtn.setText("Add First Item");
+            customizeItemBtn.setBackgroundColor(getResources().getColor(R.color.plus));
+            customizeItemBtn.setOnClickListener(this);
+            udbLayout.addView(customizeItemBtn);
         }
-        */
     }
 
     private void setContorls(){
@@ -73,6 +80,7 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
         numItems = s.getInt("CInumItems", 0);
         udbArray = new upDownBox[8];
         udbLayout = (LinearLayout) findViewById(R.id.lnrLayoutUDB);
+        udbLayout.removeAllViewsInLayout();
 
         for(int i = 0; i < numItems; i++){
             String name = s.getString("CIitemName" + String.valueOf(i), "") + " - $" + String.format("%.2f", s.getFloat("CIitemPrice" + String.valueOf(i), 0));
@@ -89,6 +97,8 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
             udbLayout.addView(udbArray[i], i);
 
         }
+
+        newItemButton();
     }
 
     private void setButtons(){
@@ -142,12 +152,20 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
                 startActivityForResult(i, 1);
                 //startActivity(i);
             } else {
-                Toast.makeText(this, "Please enter a quantity", Toast.LENGTH_SHORT).show();
+                if((udbLayout.getChildAt(0)).getId() != R.id.btnAddFirstItem) {
+                    Toast.makeText(this, "Please enter a quantity", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Please add an item", Toast.LENGTH_SHORT).show();
+                }
             }
         }
         if(v.getId() == R.id.btnCancel) {
             //set all UDboxes and total to 0
             resetItemQuantities();
+        }
+        if(v.getId() == R.id.btnAddFirstItem){
+            Intent i = new Intent("edu.coe.djshadle.SnackCheckout.CustomizeItem");
+            startActivityForResult(i, 1);
         }
     }
 

@@ -6,4 +6,5 @@
     <string name="title_activity_total_sales">Total Sales</string>
     <string name="title_activity_customize_item">Customize Item</string>
     <string name="customize_items">Customize Items</string>
+    <item type="id" name="btnAddFirstItem">100</item>
 </resources>
