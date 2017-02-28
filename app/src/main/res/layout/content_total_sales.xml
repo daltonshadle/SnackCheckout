@@ -13,12 +13,6 @@
     tools:context="edu.coe.djshadle.snackcheckout.TotalSales"
     tools:showIn="@layout/activity_total_sales">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lnrLayoutText"></LinearLayout>
-
     <Button
         android:text="Reset Inventory"
         android:layout_width="match_parent"
@@ -27,11 +21,63 @@
         android:backgroundTint="@color/minus"
         android:layout_alignParentBottom="true"/>
 
-    <TextView
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtPriceTotal"
-        android:textAlignment="textEnd"
         android:layout_above="@+id/btnResetInventory"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="15dp">
+
+        <TextView
+            android:text="Total Profit: "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtTotalProfitLabel"
+            android:layout_weight="1"
+            android:textAlignment="center" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtPriceTotal"
+            android:textAlignment="center"
+            android:text="$0.00"
+            android:layout_above="@+id/btnResetInventory"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/lnrLayoutTitle">
+
+        <TextView
+            android:text="Item Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtItemLabel"
+            android:layout_weight="1"
+            android:textAlignment="center" />
+
+        <TextView
+            android:text="Item Quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtQuantLabel"
+            android:layout_weight="1"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lnrLayoutText"
+        android:layout_below="@+id/lnrLayoutTitle"
+        android:layout_alignParentStart="true"></LinearLayout>
 </RelativeLayout>

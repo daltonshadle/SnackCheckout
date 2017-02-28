@@ -27,6 +27,7 @@ public class TotalSales extends AppCompatActivity implements View.OnClickListene
     private SharedPreferences s, totalShared;
     private SharedPreferences.Editor e, totalEdit;
     private int numItems, numTotalItems;
+    private float totalProfit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -40,6 +41,7 @@ public class TotalSales extends AppCompatActivity implements View.OnClickListene
         totalShared = getSharedPreferences("myTotalFile", 0);
         totalEdit = totalShared.edit();
 
+        totalProfit = totalShared.getFloat("TotalProfit", 0);
         numItems = s.getInt("CInumItems", 0);
         numTotalItems = totalShared.getInt("numTotalItems", 0);
         Log.d("DA", "numTotalItems = " + String.valueOf(numTotalItems));
@@ -54,10 +56,11 @@ public class TotalSales extends AppCompatActivity implements View.OnClickListene
     private void setIDControls(){
         total = (TextView) findViewById(R.id.txtPriceTotal);
         textLayout = (LinearLayout) findViewById(R.id.lnrLayoutText);
+
+        total.setText("$" + String.format("%.2f", totalProfit));
     }
 
     private void setTextFields(){
-        float savedValue = 0;
         Set<String> keys = totalShared.getStringSet("Keys", new HashSet<String>());
         int temp = keys.size();
 
@@ -86,10 +89,11 @@ public class TotalSales extends AppCompatActivity implements View.OnClickListene
                     LinearLayout.LayoutParams textLP = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
                     itemName.setText(name);
                     itemName.setLayoutParams(textLP);
+                    itemName.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
                     itemQuant.setText(String.valueOf(quant));
                     itemQuant.setLayoutParams(textLP);
-                    itemQuant.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+                    itemQuant.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
                     tempLayout.addView(itemName);
                     tempLayout.addView(itemQuant);
@@ -124,6 +128,7 @@ public class TotalSales extends AppCompatActivity implements View.OnClickListene
                 textLayout.removeAllViewsInLayout();
                 textLayout.removeAllViews();
                 totalEdit.commit();
+                total.setText("$0.00");
             }
         });
 

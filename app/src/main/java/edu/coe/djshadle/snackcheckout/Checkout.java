@@ -245,6 +245,9 @@ public class Checkout extends AppCompatActivity implements View.OnClickListener 
             }
         }
 
+        float tempTotalProfit = totalShared.getFloat("TotalProfit", 0);
+        tempTotalProfit += totalPrice;
+        totalEdit.putFloat("TotalProfit", tempTotalProfit);
         totalEdit.putStringSet("Keys", keys);
         totalEdit.commit();
 

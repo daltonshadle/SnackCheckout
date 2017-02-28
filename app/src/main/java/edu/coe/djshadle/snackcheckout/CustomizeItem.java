@@ -137,6 +137,7 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
                 Toast.makeText(this, "Items have been saved", Toast.LENGTH_SHORT).show();
                 SharedPrefAllItems();
 
+                finish();
                 break;
             case R.id.CIListItems:
                 Collections.sort(customUDBList);
@@ -222,7 +223,7 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
 
                 final EditText priceBox = new EditText(context);
                 priceBox.setHint("Item Price");
-                priceBox.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                priceBox.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                 priceBox.setImeActionLabel("Done",EditorInfo.IME_ACTION_DONE);
                 layout.addView(priceBox);
 
@@ -237,6 +238,8 @@ public class CustomizeItem extends AppCompatActivity implements AdapterView.OnIt
                                     customUDBList.remove(position);
                                     customUDBList.add(position, itemCollection);
                                     customUDBListAdapter.notifyDataSetChanged();
+                                } else {
+                                    Toast.makeText(CustomizeItem.this, "Item name and price were not entered", Toast.LENGTH_SHORT).show();
                                 }
 
                             }
