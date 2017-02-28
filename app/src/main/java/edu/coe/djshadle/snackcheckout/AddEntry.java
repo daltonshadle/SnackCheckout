@@ -60,6 +60,12 @@ public class AddEntry extends AppCompatActivity implements View.OnClickListener,
         quantRestoreE.commit();
 
         Log.d(TAG, "OnCreate");
+
+        /*
+        if(udbLayout.getChildCount() == 0){
+
+        }
+        */
     }
 
     private void setContorls(){
